@@ -1,0 +1,10 @@
+TODO:
+
+ThreadMatch:
+    - 2 threads pour le choix de formation
+    - augmenter la taille et le nombre de navires dans chaque partie
+    - input control
+    - plusieurs matchs / lobby ....
+
+Serveur:
+    
