@@ -4,14 +4,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class ThreadMatch extends Thread {
     Socket j1, j2;
     BufferedReader inputJ1, inputJ2;
     PrintWriter outputJ1, outputJ2;
-    String formationJ1[] = new String[2];
-    String formationJ2[] = new String[2];
+    char formationJ1[][] = new char[5][5];
+    char formationJ2[][] = new char[5][5];
 
     public ThreadMatch(int idMatch, Socket j1, Socket j2) {
         try {
@@ -26,106 +25,103 @@ public class ThreadMatch extends Thread {
         }
     }
 
+    public static void afficherTableaux(char[][] mP, char[][] pA) {
+        System.out.print("  Plateau joueur 1\t\t\tPlateau joueur 2\n");
+        System.out.print("  A B C D E\t\t\t\t  A B C D E\n");
+        int indx;
+        for (int i = 0; i < 5; i++) {
+            indx = i + 1;
+            System.out.print(indx + " ");
+            for (int j = 0; j < 5; j++) {
+                System.out.print(mP[j][i] + " ");
+            }
+            System.out.print("\t\t\t\t" + indx + " ");
+            for (int j = 0; j < 5; j++) {
+                System.out.print(pA[j][i] + " ");
+            }
+            System.out.println();
+        }
+    }
+
     public void run() {
         try {
-            /*
-             * Once a match starts I want a function that handles each user's formation
-             * something like :
-             * byte[] BoardJ1 = formationJoueur(J1);
-             * byte[] BoardJ2 = formationJoueur(J2);
-             * Then a function that controls the game: each time it gives a user to input a
-             * coordinate to hit
-             * and updates the states of the boards as well as the log message
-             * something like:
-             * while(matchEnded){
-             * moveJ1 = getMoveJ1(); // takes input of J1
-             * updateGame(J2); // updates J2 board
-             * moveJ2 = getMoveJ2();
-             * updateGame(J1);
-             * }
-             * Once the match has ended, the winner is announced and the thread is closed
-             */
-            outputJ1.println("Jeu commencé! Choisi la coordonnée de ton premier navire de taille 5 (ex: A1 v):");
-            String input = inputJ1.readLine();
-            String[] data = input.split(" ");
-            String cord = data[0];
-            String direction = data[1];
-            if(direction.equals("v")){
-                
+            // get the two boards
+            String boardJ1 = inputJ1.readLine();
+            String boardJ2 = inputJ2.readLine();
+            // reconstruction des plateaux
+            String[] resJ1 = boardJ1.split(" ");
+            String[] resJ2 = boardJ2.split(" ");
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    formationJ1[i][j] = resJ1[i].charAt(j);
+                    formationJ2[i][j] = resJ2[i].charAt(j);
+                }
             }
-            formationJ1[0] = inputJ1.readLine();
-            System.out.println("Joueur 1 - Cordonnée 1: " + formationJ1[0]);
-            outputJ1.println("Coordonnée finale:");
-            formationJ1[1] = inputJ1.readLine();
-            System.out.println("Joueur 1 - Cordonnée 2: " + formationJ1[1]);
-            outputJ2.println("C'est maintenant ton tour! Choisi la première coordonnée de ton navire:");
-            formationJ2[0] = inputJ2.readLine();
-            System.out.println("Joueur 2 - Cordonnée 1: " + formationJ2[0]);
-            outputJ2.println("Coordonnée finale:");
-            formationJ2[1] = inputJ2.readLine();
-            System.out.println("Joueur 2 - Cordonnée 2: " + formationJ2[1]);
+            // Début
+            outputJ1.println("Debut!");
+            outputJ2.println("Debut!");
+
             String choixJ1, choixJ2;
-            int compteurJ1 = 2;
-            int compteurJ2 = 2;
-            outputJ1.println("Début Match! Coordonnée à bombarder:");
-            outputJ2.println("Début Match! Coordonnée à bombarder:");
+            int vieJ1 = 5, vieJ2 = 5, rowJ1, rowJ2, colJ1, colJ2;
+
             while (true) {
-                choixJ1 = inputJ1.readLine();
+                do {
+                    choixJ1 = inputJ1.readLine();
+                } while (choixJ1 == null);
+                do {
+                    choixJ2 = inputJ2.readLine();
+                } while (choixJ2 == null);
                 System.out.println("Joueur n°1 a choisi: " + choixJ1);
-                choixJ2 = inputJ2.readLine();
                 System.out.println("Joueur n°2 a choisi: " + choixJ2);
-                if (formationJ1[0].equals(choixJ2) || formationJ1[1].equals(choixJ2)) {
-                    compteurJ1--;
-                    System.out.println("Navire J1 Touché - Rem: " + compteurJ1);
-                    if (formationJ1[0] == choixJ2)
-                        formationJ1[0] = "";
-                    if (formationJ1[1] == choixJ2)
-                        formationJ1[1] = "";
-                    if (compteurJ1 == 0 || compteurJ2 == 0) {
-                        if (compteurJ1 == 0)
-                            outputJ1.println("Perdu!");
-                        else
-                            outputJ2.println("Gagné!");
-                        System.out.println("Match Fini, J1 Perdu");
-                        break;
-                    } else {
-                        outputJ1.println("L'adversaire a bombardé " + choixJ2
-                                + "! Ton navire a été touché! Coordonnée à bombarder:");
-                    }
-                } else {
-                    outputJ1.println("L'adversaire a bombardé " + choixJ2
-                            + "! Ton navire n'a pas été touché! Coordonnée à bombarder:");
+
+                colJ1 = choixJ1.charAt(0) - 65; // letter
+                rowJ1 = choixJ1.charAt(1) - 49; // number
+                colJ2 = choixJ2.charAt(0) - 65; // letter
+                rowJ2 = choixJ2.charAt(1) - 49; // number
+
+                // 3 readlines : coord, hitOrMiss (hit-h, miss-m), status of game (win-w,
+                // lose-l)
+                outputJ2.println(choixJ1);
+                outputJ1.println(choixJ2);
+                if (formationJ2[colJ1][rowJ1] == 'o') {
+                    System.out.println("Joueur n°1 a touché un navire du joueur n°2!");
+                    outputJ1.println('h');
+                    vieJ2--;
+                    formationJ2[colJ1][rowJ1] = 'ø';
+                } else if (formationJ2[colJ1][rowJ1] == '-') {
+                    System.out.println("Joueur n°1 a raté le coup!");
+                    outputJ1.println('m');
                 }
-                if (formationJ2[0].equals(choixJ1) || formationJ2[1].equals(choixJ1)) {
-                    compteurJ2--;
-                    System.out.println("Navire J2 Touché - Rem: " + compteurJ2);
-                    if (formationJ2[0] == choixJ1)
-                        formationJ2[0] = "";
-                    if (formationJ2[1] == choixJ1)
-                        formationJ2[1] = "";
-                    if (compteurJ1 == 0 || compteurJ2 == 0) {
-                        if (compteurJ2 == 0) {
-                            outputJ1.println("Perdu!");
-                            j1.close();
-                            j2.close();
-                        } else {
-                            outputJ2.println("Gagné!");
-                            j1.close();
-                            j2.close();
-                        }
-                        System.out.println("Match Fini, J2 Perdu");
-                        break;
-                    } else {
-                        outputJ2.println("L'adversaire a bombardé " + choixJ1
-                                + "! Ton navire a été touché! Coordonnée à bombarder:");
-                    }
-                } else {
-                    outputJ2.println("L'adversaire a bombardé " + choixJ1
-                            + "! Ton navire n'a pas été touché! Coordonnée à bombarder:");
+                if (formationJ1[colJ2][rowJ2] == 'o') {
+                    System.out.println("Joueur n°2 a touché un navire du joueur n°1!");
+                    outputJ2.println('h');
+                    vieJ1--;
+                    formationJ1[colJ2][rowJ2] = 'ø';
+                } else if (formationJ1[colJ2][rowJ2] == '-') {
+                    System.out.println("Joueur n°2 a raté le coup!");
+                    outputJ2.println('m');
                 }
+                if (vieJ1 == 0) {
+                    outputJ1.println("l");
+                    outputJ2.println("w");
+                    System.out.println("Match terminé! Joueur n°2 gagne.");
+                    break;
+                }
+                if (vieJ2 == 0) {
+                    outputJ2.println("l");
+                    outputJ1.println("w");
+                    System.out.println("Match terminé! Joueur n°1 gagne.");
+                    break;
+                }
+                if (vieJ1 > 0 && vieJ2 > 0) {
+                    outputJ2.println("");
+                    outputJ1.println("");
+                }
+                afficherTableaux(formationJ1, formationJ2);
+                System.out.println("En attendant les joueurs...");
             }
         } catch (Exception e) {
-
+            System.out.println(e);
         }
     }
 
