@@ -7,6 +7,7 @@ import java.net.Socket;
 
 public class ThreadMatch extends Thread {
     Socket j1, j2;
+    int idMatch;
     BufferedReader inputJ1, inputJ2;
     PrintWriter outputJ1, outputJ2;
     char formationJ1[][] = new char[5][5];
@@ -16,17 +17,19 @@ public class ThreadMatch extends Thread {
         try {
             this.j1 = j1;
             this.j2 = j2;
+            this.idMatch = idMatch;
             inputJ1 = new BufferedReader(new InputStreamReader(j1.getInputStream()));
             inputJ2 = new BufferedReader(new InputStreamReader(j2.getInputStream()));
             outputJ1 = new PrintWriter(j1.getOutputStream(), true);
             outputJ2 = new PrintWriter(j2.getOutputStream(), true);
+            System.out.println("Match n°" + idMatch + " has started!");
         } catch (Exception e) {
             System.out.println("Erreur: " + e + ". Abort.");
         }
     }
 
-    public static void afficherTableaux(char[][] mP, char[][] pA) {
-        System.out.print("  Plateau joueur 1\t\t\tPlateau joueur 2\n");
+    public static void afficherTableaux(char[][] mP, char[][] pA, int id) {
+        System.out.print("Match n°" + id + "\n  Plateau joueur 1\t\t\tPlateau joueur 2\n");
         System.out.print("  A B C D E\t\t\t\t  A B C D E\n");
         int indx;
         for (int i = 0; i < 5; i++) {
@@ -62,7 +65,7 @@ public class ThreadMatch extends Thread {
             outputJ2.println("Debut!");
 
             String choixJ1, choixJ2;
-            int vieJ1 = 5, vieJ2 = 5, rowJ1, rowJ2, colJ1, colJ2;
+            int rowJ1, rowJ2, colJ1, colJ2;
 
             while (true) {
                 do {
@@ -86,7 +89,6 @@ public class ThreadMatch extends Thread {
                 if (formationJ2[colJ1][rowJ1] == 'o') {
                     System.out.println("Joueur n°1 a touché un navire du joueur n°2!");
                     outputJ1.println('h');
-                    vieJ2--;
                     formationJ2[colJ1][rowJ1] = 'ø';
                 } else if (formationJ2[colJ1][rowJ1] == '-') {
                     System.out.println("Joueur n°1 a raté le coup!");
@@ -95,30 +97,42 @@ public class ThreadMatch extends Thread {
                 if (formationJ1[colJ2][rowJ2] == 'o') {
                     System.out.println("Joueur n°2 a touché un navire du joueur n°1!");
                     outputJ2.println('h');
-                    vieJ1--;
                     formationJ1[colJ2][rowJ2] = 'ø';
                 } else if (formationJ1[colJ2][rowJ2] == '-') {
                     System.out.println("Joueur n°2 a raté le coup!");
                     outputJ2.println('m');
                 }
-                if (vieJ1 == 0) {
-                    outputJ1.println("l");
-                    outputJ2.println("w");
-                    System.out.println("Match terminé! Joueur n°2 gagne.");
-                    break;
+                boolean j1Lost, j2Lost;
+                j1Lost = true;
+                j2Lost = true;
+                for (int i = 0; i < 5; i++) {
+                    for (int j = 0; j < 5; j++) {
+                        if (formationJ1[i][j] == 'o') {
+                            j1Lost = false;
+                        }
+                        if (formationJ2[i][j] == 'o') {
+                            j2Lost = false;
+                        }
+                    }
                 }
-                if (vieJ2 == 0) {
+                if (j2Lost) {
+                    outputJ1.println("x");
                     outputJ2.println("l");
-                    outputJ1.println("w");
                     System.out.println("Match terminé! Joueur n°1 gagne.");
                     break;
                 }
-                if (vieJ1 > 0 && vieJ2 > 0) {
+                if (j1Lost) {
+                    outputJ2.println("w");
+                    outputJ1.println("l");
+                    System.out.println("Match terminé! Joueur n°2 gagne.");
+                    break;
+                }
+                if (!j1Lost && !j2Lost) {
                     outputJ2.println("");
                     outputJ1.println("");
+                    afficherTableaux(formationJ1, formationJ2, this.idMatch);
+                    System.out.println("En attendant les joueurs...");
                 }
-                afficherTableaux(formationJ1, formationJ2);
-                System.out.println("En attendant les joueurs...");
             }
         } catch (Exception e) {
             System.out.println(e);

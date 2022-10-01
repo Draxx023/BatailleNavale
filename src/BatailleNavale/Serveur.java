@@ -17,11 +17,14 @@ public class Serveur {
 
             // écoute pour des joueurs
             int idMatch = 0;
-            Socket joueur1 = ecoute.accept();
-            // new ThreadInit(idMatch, joueur1).start();
-            Socket joueur2 = ecoute.accept();
-            // new ThreadInit(idMatch, joueur2).start();
-            new ThreadMatch(idMatch, joueur1, joueur2).start();
+            Socket joueur1, joueur2;
+            while (idMatch < 5) {
+                joueur1 = ecoute.accept();
+                joueur2 = ecoute.accept();
+                System.out.println("Two new users have joined! Starting new game...");
+                new ThreadMatch(idMatch, joueur1, joueur2).start();
+                idMatch++;
+            }
             ecoute.close();
         } catch (Exception e) {
             System.out.println("Erreur Inconnu (Réf: " + e + "). Arrêt du Serveur");
