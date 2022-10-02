@@ -29,7 +29,7 @@ public class ThreadMatch extends Thread {
     }
 
     public static void afficherTableaux(char[][] mP, char[][] pA, int id) {
-        System.out.print("Match n°" + id + "\n  Plateau joueur 1\t\t\tPlateau joueur 2\n");
+        System.out.print("Log Match n°" + id + "\n  Plateau joueur 1\t\t\tPlateau joueur 2\n");
         System.out.print("  A B C D E\t\t\t\t  A B C D E\n");
         int indx;
         for (int i = 0; i < 5; i++) {
@@ -74,8 +74,8 @@ public class ThreadMatch extends Thread {
                 do {
                     choixJ2 = inputJ2.readLine();
                 } while (choixJ2 == null);
-                System.out.println("Joueur n°1 a choisi: " + choixJ1);
-                System.out.println("Joueur n°2 a choisi: " + choixJ2);
+                System.out.println("Log Match n°" + idMatch + ": Joueur n°1 a choisi: " + choixJ1);
+                System.out.println("Log Match n°" + idMatch + ": Joueur n°2 a choisi: " + choixJ2);
 
                 colJ1 = choixJ1.charAt(0) - 65; // letter
                 rowJ1 = choixJ1.charAt(1) - 49; // number
@@ -87,19 +87,19 @@ public class ThreadMatch extends Thread {
                 outputJ2.println(choixJ1);
                 outputJ1.println(choixJ2);
                 if (formationJ2[colJ1][rowJ1] == 'o') {
-                    System.out.println("Joueur n°1 a touché un navire du joueur n°2!");
+                    System.out.println("Log Match n°" + idMatch + ": Joueur n°1 a touché un navire du joueur n°2!");
                     outputJ1.println('h');
                     formationJ2[colJ1][rowJ1] = 'ø';
                 } else if (formationJ2[colJ1][rowJ1] == '-') {
-                    System.out.println("Joueur n°1 a raté le coup!");
+                    System.out.println("Log Match n°" + idMatch + ": Joueur n°1 a raté le coup!");
                     outputJ1.println('m');
                 }
                 if (formationJ1[colJ2][rowJ2] == 'o') {
-                    System.out.println("Joueur n°2 a touché un navire du joueur n°1!");
+                    System.out.println("Log Match n°" + idMatch + ": Joueur n°2 a touché un navire du joueur n°1!");
                     outputJ2.println('h');
                     formationJ1[colJ2][rowJ2] = 'ø';
                 } else if (formationJ1[colJ2][rowJ2] == '-') {
-                    System.out.println("Joueur n°2 a raté le coup!");
+                    System.out.println("Log Match n°" + idMatch + ": Joueur n°2 a raté le coup!");
                     outputJ2.println('m');
                 }
                 boolean j1Lost, j2Lost;
@@ -118,20 +118,20 @@ public class ThreadMatch extends Thread {
                 if (j2Lost) {
                     outputJ1.println("x");
                     outputJ2.println("l");
-                    System.out.println("Match terminé! Joueur n°1 gagne.");
+                    System.out.println("Log Match n°" + idMatch + ": Match terminé! Joueur n°1 gagne.");
                     break;
                 }
                 if (j1Lost) {
                     outputJ2.println("w");
                     outputJ1.println("l");
-                    System.out.println("Match terminé! Joueur n°2 gagne.");
+                    System.out.println("Log Match n°" + idMatch + ": Match terminé! Joueur n°2 gagne.");
                     break;
                 }
                 if (!j1Lost && !j2Lost) {
                     outputJ2.println("");
                     outputJ1.println("");
                     afficherTableaux(formationJ1, formationJ2, this.idMatch);
-                    System.out.println("En attendant les joueurs...");
+                    System.out.println("Log Match n°" + idMatch + ": En attendant les joueurs...");
                 }
             }
         } catch (Exception e) {

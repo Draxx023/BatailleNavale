@@ -16,8 +16,9 @@ public class Serveur {
             System.out.println("Serveur lancé avec succès!");
 
             // écoute pour des joueurs
-            int idMatch = 0;
+            int idMatch = 1;
             Socket joueur1, joueur2;
+            // 5 matches
             while (idMatch < 5) {
                 joueur1 = ecoute.accept();
                 joueur2 = ecoute.accept();
