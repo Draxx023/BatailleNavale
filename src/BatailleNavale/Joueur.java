@@ -34,13 +34,12 @@ public class Joueur {
             String choix;
             int colB1, rowB1;
             char directionB1;
-            System.out.print(
-                    "Rappel: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nTon choix: ");
+            System.out.print("Ton choix: ");
             choix = sc.nextLine();
             matcher = pattern.matcher(choix);
             while (!matcher.matches()) {
                 System.out.print(
-                        "Attention: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nTon choix: ");
+                        "Mauvaise saisie\nTon choix: ");
                 choix = sc.nextLine();
                 matcher = pattern.matcher(choix);
             }
@@ -54,12 +53,12 @@ public class Joueur {
                     badInput = true;
                     System.out.println("Ton bateau sera dehors la zone du jeu!");
                     System.out.print(
-                            "Rappel: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nChoisir une nouvelle position: ");
+                            "Choisir une nouvelle position: ");
                     choix = sc.nextLine();
                     matcher = pattern.matcher(choix);
                     while (!matcher.matches()) {
                         System.out.print(
-                                "Attention: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nChoisir une nouvelle position: ");
+                                "Mauvaise saisie!\nChoisir une nouvelle position: ");
                         choix = sc.nextLine();
                         matcher = pattern.matcher(choix);
                     }
@@ -68,25 +67,24 @@ public class Joueur {
                     badInput = true;
                     System.out.println("Ton bateau sera dehors la zone du jeu!");
                     System.out.print(
-                            "Rappel: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nChoisir une nouvelle position: ");
+                            "Choisir une nouvelle position: ");
                     choix = sc.nextLine();
                     matcher = pattern.matcher(choix);
                     while (!matcher.matches()) {
                         System.out.print(
-                                "Attention: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nChoisir une nouvelle position: ");
+                                "Mauvaise saisie!\nChoisir une nouvelle position: ");
                         choix = sc.nextLine();
                         matcher = pattern.matcher(choix);
                     }
                 }
             } while (badInput);
-            // System.out.println(colB1 + " " + rowB1 + " " + directionB1);
             if (directionB1 == 'V') {
                 for (int i = 0; i < 3; i++) {
                     monPlateau[colB1][rowB1 + i] = 'o';
                 }
             } else if (directionB1 == 'H') {
                 for (int i = 0; i < 3; i++) {
-                    monPlateau[colB1 + i][rowB1] = 'o'; // no user input is controlled yet
+                    monPlateau[colB1 + i][rowB1] = 'o';
                 }
             }
 
@@ -94,13 +92,12 @@ public class Joueur {
             int colB2, rowB2;
             char directionB2;
             System.out.println("\nPositionner le deuxième navire de ta flotte de longueur 2");
-            System.out.print(
-                    "Rappel! La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nTon choix: ");
+            System.out.print("Ton choix: ");
             choix = sc.nextLine();
             matcher = pattern.matcher(choix);
             while (!matcher.matches()) {
                 System.out.print(
-                        "Attention! La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nTon choix: ");
+                        "Mauvaise saisie\nTon choix: ");
                 choix = sc.nextLine();
                 matcher = pattern.matcher(choix);
             }
@@ -113,12 +110,12 @@ public class Joueur {
                     badInput = true;
                     System.out.println("Ton bateau sera dehors la zone du jeu!");
                     System.out.print(
-                            "Rappel: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nChoisir une nouvelle position: ");
+                            "Choisir une nouvelle position: ");
                     choix = sc.nextLine();
                     matcher = pattern.matcher(choix);
                     while (!matcher.matches()) {
                         System.out.print(
-                                "Attention: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nChoisir une nouvelle position: ");
+                                "Mauvais saisie\nChoisir une nouvelle position: ");
                         choix = sc.nextLine();
                         matcher = pattern.matcher(choix);
                     }
@@ -127,28 +124,26 @@ public class Joueur {
                     badInput = true;
                     System.out.println("Ton bateau sera dehors la zone du jeu!");
                     System.out.print(
-                            "Rappel: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nChoisir une nouvelle position: ");
+                            "Choisir une nouvelle position: ");
                     choix = sc.nextLine();
                     matcher = pattern.matcher(choix);
                     while (!matcher.matches()) {
                         System.out.print(
-                                "Attention: La saisie doit respecter le format suivant: [A/B/C/D/E][1/2/3/4/5] [H/V]\nChoisir une nouvelle position: ");
+                                "Mauvaise saisie\nChoisir une nouvelle position: ");
                         choix = sc.nextLine();
                         matcher = pattern.matcher(choix);
                     }
                 }
             } while (badInput);
-            // System.out.println(colB2 + " " + rowB2 + " " + directionB2);
             if (directionB2 == 'V') {
                 for (int i = 0; i < 2; i++) {
-                    monPlateau[colB2][rowB2 + i] = 'o'; // no user input is controlled yet
+                    monPlateau[colB2][rowB2 + i] = 'o';
                 }
             } else if (directionB2 == 'H') {
                 for (int i = 0; i < 2; i++) {
-                    monPlateau[colB2 + i][rowB2] = 'o'; // no user input is controlled yet
+                    monPlateau[colB2 + i][rowB2] = 'o';
                 }
             }
-            afficherTableaux(monPlateau, plateauAdv);
             String payload = "";
             for (int i = 0; i < 5; i++) {
                 for (int j = 0; j < 5; j++) {
@@ -158,14 +153,16 @@ public class Joueur {
                     payload += " ";
             }
             out.println(payload);
+            System.out.println("En attendant le deuxième joueur....");
             int lastMoveRow, lastMoveCol, col, row;
             String debut = in.readLine();
             if (debut.equals("Debut!")) {
-                System.out.println("\n\t\t\tDébut du match!\n");
+                System.out
+                        .println("\n\t\t\tDébut du match! (Vous pouvez quitter à tout moment en saisissant 'quit')\n");
                 while (command != "quit") {
                     // output
                     afficherTableaux(monPlateau, plateauAdv);
-                    System.out.print("C'est ton tour! Coordonnée: ");
+                    System.out.print("C'est ton tour! Coordonnée: > ");
                     command = sc.nextLine();
                     pattern = Pattern.compile("^[A-E][1-5]$");
                     matcher = pattern.matcher(command);
@@ -183,22 +180,20 @@ public class Joueur {
                     } while (coord == null);
                     col = coord.charAt(0) - 65; // letter
                     row = coord.charAt(1) - 49; // number
-                    System.out.println("Ton adversaire a bombardé " + coord + "!");
+                    System.out.println("INFO: Ton adversaire a bombardé " + coord + "!");
                     if (monPlateau[col][row] == 'o') {
-                        System.out.println("Ton navire a été touché!");
                         monPlateau[col][row] = 'ø';
                     } else if (monPlateau[col][row] == '-') {
-                        System.out.println("Ton adversaire a raté le coup!");
                         monPlateau[col][row] = 'x';
                     }
                     do {
                         hitOrMiss = in.readLine();
                     } while (hitOrMiss == null);
                     if (hitOrMiss.equals("h")) {
-                        System.out.println("T'as touché un bateau!");
+                        System.out.println("Touché!");
                         plateauAdv[lastMoveCol][lastMoveRow] = 'ø';
                     } else if (hitOrMiss.equals("m")) {
-                        System.out.println("T'as raté le coup!");
+                        System.out.println("Raté!");
                         plateauAdv[lastMoveCol][lastMoveRow] = 'x';
                     }
                     do {

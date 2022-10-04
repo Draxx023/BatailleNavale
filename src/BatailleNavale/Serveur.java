@@ -18,7 +18,7 @@ public class Serveur {
             // écoute pour des joueurs
             int idMatch = 1;
             Socket joueur1, joueur2;
-            // 5 matches
+            // jusqu'à 5 matches
             while (idMatch < 5) {
                 joueur1 = ecoute.accept();
                 joueur2 = ecoute.accept();
